@@ -32,11 +32,17 @@
                             <outlet property="delegate" destination="rOM-Kw-ilK" id="UbQ-aV-qH4"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="ToDoEy" id="Acy-0u-hCa"/>
+                    <navigationItem key="navigationItem" title="ToDoEy" id="Acy-0u-hCa">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="n8i-hZ-xqm">
+                            <connections>
+                                <action selector="addButtonPressed:" destination="rOM-Kw-ilK" id="PFX-Zt-KLd"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Srf-XP-z5O" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1134" y="34"/>
+            <point key="canvasLocation" x="890" y="19"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="2MC-yO-0Hv">
