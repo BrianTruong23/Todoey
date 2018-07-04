@@ -4,7 +4,9 @@
 //
 //  Created by MACBOOK on 6/30/18.
 //  Copyright © 2018 Brian Truong. All rights reserved.
-//
+//Library/Developer/CoreSimulator/Devices/B46B2855-6E0B-45A3-89AA-B0317228321D/data/Containers/Data/Application/FBC3D758-433D-4104-83CA-2311BA0B41B2/
+
+
 
 import UIKit
 
@@ -19,20 +21,10 @@ class ToDoListViewController: UITableViewController {
         super.viewDidLoad()
        
         print(dataFilePath)
-        let newItem = Item()
-        newItem.title = "Find Mike"
-       itemArray.append(newItem)
+       
+
+        loadItems()
         
-        let newItem2 = Item()
-        newItem2.title = "Find Mice"
-        itemArray.append(newItem2)
-        
-        let newItem3 = Item()
-        newItem3.title = "Find Milk"
-        itemArray.append(newItem3)
-//     if let item  = defaults.array(forKey: "ToDoListArray") as? [Item] {
-//          itemArray = item
-//        }
     }
     // 
     // MARK : TableView datasource method
@@ -126,5 +118,16 @@ class ToDoListViewController: UITableViewController {
        self.tableView.reloadData()
     }
     
+    func loadItems(){
+        if let data = try? Data(contentsOf: dataFilePath!) {
+            let decoder = PropertyListDecoder()
+            do {
+                  itemArray = try decoder.decode([Item].self, from: data)
+            }
+            catch {
+                print("Error decoding system array \(error)")
+            }
+        }
+    }
 }
 
