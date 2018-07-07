@@ -7,13 +7,14 @@
 //
 
 import UIKit
-import CoreData
+import RealmSwift
 
 class CategoryViewCoTableViewController: UITableViewController {
-
-    var categoryArrays = [Category]()
+    let realm = try! Realm()
     
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    var categoryArrays : Results<Category>!
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,10 +29,11 @@ class CategoryViewCoTableViewController: UITableViewController {
         
         let action = UIAlertAction(title: "Add", style: .default) { (action) in
             // what happens when user click the add button
-            let newCategory = Category(context: self.context)
+            let newCategory = Category()
             newCategory.name = alertText.text!
-            self.categoryArrays.append(newCategory)
-            self.saveCategorys()
+            
+          
+            self.save(category: newCategory)
             
         }
         
@@ -79,9 +81,11 @@ class CategoryViewCoTableViewController: UITableViewController {
     
     //MARK: - Data Manipulation method
     
-    func saveCategorys(){
+    func save(category : Category){
         do {
-            try context.save()
+            try realm.write {
+                realm.add(category)
+            }
         } catch{
             print("Error saving data\(error)")
             
@@ -90,16 +94,10 @@ class CategoryViewCoTableViewController: UITableViewController {
     }
     
     func loadCategory(){
-        let request : NSFetchRequest<Category> =  Category.fetchRequest()
-        
-        do{
-            
-            categoryArrays = try context.fetch(request)
-        } catch{
-            print("Error loading items \(error)")
-        }
+        categoryArrays = realm.objects(Category.self)
+
         tableView.reloadData()
-        
+
     }
     
     
