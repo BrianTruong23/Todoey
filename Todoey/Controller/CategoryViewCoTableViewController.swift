@@ -12,7 +12,7 @@ import RealmSwift
 class CategoryViewCoTableViewController: UITableViewController {
     let realm = try! Realm()
     
-    var categoryArrays : Results<Category>!
+    var categoryArrays : Results<Category>?
     
     
     
@@ -51,13 +51,14 @@ class CategoryViewCoTableViewController: UITableViewController {
    
     //MARK: -TableView datasource method
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categoryArrays.count
+        return categoryArrays?.count ?? 1
     }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath)
         
        
-        cell.textLabel?.text = categoryArrays[indexPath.row].name
+        cell.textLabel?.text = categoryArrays?[indexPath.row].name ?? "No Category Added Yet"
       
         
         return cell
@@ -74,7 +75,7 @@ class CategoryViewCoTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     let destinationVC = segue.destination as! ToDoListViewController
         if let indexPath = tableView.indexPathForSelectedRow {
-            destinationVC.selectedCategory = categoryArrays[indexPath.row]
+            destinationVC.selectedCategory = categoryArrays?[indexPath.row]
         }
         
     }
