@@ -48,29 +48,29 @@ print( FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
         
-        if let item = todoItems?[indexPath.row] {
+          if let item = todoItems?[indexPath.row] {
             cell.textLabel?.text = item.title
             // Ternary Operator ==>
             // value = condition ? valueIfTrue : ValueIfFalse
             
             cell.accessoryType = item.done ?  .checkmark  : .none
-          
+           
         } else{
             cell.textLabel?.text = "No Items Added"
         }
-
         
-
         return cell
     }
     
     // MARK: - TableView delegate methods
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+      
         if let item = todoItems?[indexPath.row] {
             do {
                 try realm.write {
                     item.done = !item.done
+                    
+                  
                 }
             } catch {
                 print("Error saving done status, \(error)")
@@ -80,6 +80,7 @@ print( FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         tableView.reloadData()
         
         tableView.deselectRow(at: indexPath, animated: true)
+    
         
     }
     
@@ -98,8 +99,7 @@ print( FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
                 
             if let currenCategory =  self.selectedCategory{
                 do{
-                    
-                    try self.realm.write {
+                     try self.realm.write {
                         let newItem = Item( )
                         newItem.title = alertText.text!
                         currenCategory.items.append(newItem)
@@ -108,9 +108,10 @@ print( FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
             }catch{
                 print("Error saving data\(error)")
             }
-            self.tableView.reloadData()
+            
        
          }
+           self.tableView.reloadData()
         }
         
         alert.addTextField { (alertTextField) in
