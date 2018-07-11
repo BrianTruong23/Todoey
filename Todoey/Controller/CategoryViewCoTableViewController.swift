@@ -8,10 +8,10 @@
 
 import UIKit
 import RealmSwift
-import SwipeCellKit
 
 
-class CategoryViewCoTableViewController: UITableViewController  {
+
+class CategoryViewCoTableViewController: SwipeTableViewController  {
     let realm = try! Realm()
     
     var categoryArrays : Results<Category>?
@@ -60,16 +60,12 @@ class CategoryViewCoTableViewController: UITableViewController  {
     }
     
     
-//    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! SwipeTableViewCell
-//        cell.delegate = self
-//        return cell
-//    }
-//
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath) as! SwipeTableViewCell
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
+        
        cell.textLabel?.text = categoryArrays?[indexPath.row].name ?? "No Category Added Yet"
-       cell.delegate = self
+
         
         return cell
         
@@ -110,22 +106,22 @@ class CategoryViewCoTableViewController: UITableViewController  {
         tableView.reloadData()
 
     }
-}
-
-// MARK: - Swipe Cell Delegate
-extension CategoryViewCoTableViewController : SwipeTableViewCellDelegate {
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
-        guard orientation == .right else { return nil }
-
-        let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
-            // handle action by updating model with deletion
-            print("Item deleted")
+    // MARK : -Delete Data from Swipe
+    override func updateModel(at indexPath: IndexPath) {
+        super.updateModel(at: indexPath)
+        
+if let categoryForDeletion = self.categoryArrays?[indexPath.row] {
+    do {
+        try self.realm.write {
+            self.realm.delete(categoryForDeletion)
         }
-
-        // customize the action appearance
-        deleteAction.image = UIImage(named: "delete-icon")
-
-        return [deleteAction]
+    }catch {
+        print("Error deleting data \(error)")
     }
 
+}
+        
+    }
+    
+    
 }
